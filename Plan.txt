@@ -1,1 +1,2 @@
-- Généricité
+1- Généricité ----------------- Sérialisation
+2- Reflection (introspection) ------------ (Voir SerialHelperGeneric - méthodes csv)

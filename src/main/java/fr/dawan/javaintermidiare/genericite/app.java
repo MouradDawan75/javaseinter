@@ -73,5 +73,14 @@ public class app {
         System.out.println(">>>>>>>>> Sérialisation CSV");
         SerialHelper.exportCsv("produits.csv", prods);
 
+        for(Produit prd: SerialHelper.importCsv("produits.csv")){
+            System.out.println(prd);
+        }
+
+        System.out.println(">>>>>>>>>>> Sérialisation CSV generic");
+    SerialHelperGeneric.exportCsvGeneric("prodgeneric.csv", prods);
+    for(Produit p : SerialHelperGeneric.importCsvGeneric("prodgeneric.csv", Produit.class)){
+        System.out.println(p);
+    }
     }
 }

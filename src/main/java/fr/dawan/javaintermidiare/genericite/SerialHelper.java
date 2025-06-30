@@ -13,8 +13,8 @@ import java.util.List;
 Obligation: une ressource (fichier, BD) doit être libérée à la fin de son utilisation
 Stream (flux): est une sorte de canal intermédiaire entre une source et une destination
 Java propose 2 types de flux:
-Fluxs binaires: lecture/écriture caractères: FileInputStream -FileOutputStream
-Fluxs caractères: lecture/écriture ligne/ligne: FileReader- FileWriter
+Fluxs binaires: lecture/écriture caractères: FileInputStream -FileOutputStream (BufferedInputStream, BufferedOutputStream)
+Fluxs caractères: lecture/écriture ligne/ligne: FileReader- FileWriter (BufferedReader, BufferedWriter)
 
 Bonne pratique: prévoir un buffer pour les opérations de lecture/écriture
 
@@ -145,6 +145,21 @@ public class SerialHelper {
         List<Produit> lst = new ArrayList<>();
         try{
 
+            FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr);
+
+            String ligne = br.readLine();
+
+            while(ligne != null){
+
+                //découoer la ligne en cours
+                String[] tab =  ligne.split(",");
+                Produit p = new Produit(Integer.parseInt(tab[0]), tab[1], Double.parseDouble(tab[2]));
+                lst.add(p);
+                ligne= br.readLine();
+            }
+
+            br.close();
            return lst;
         } catch (Exception e) {
             e.printStackTrace();

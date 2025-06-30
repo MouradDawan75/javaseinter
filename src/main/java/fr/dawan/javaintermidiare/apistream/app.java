@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class app {
@@ -39,6 +40,59 @@ public class app {
         Stream<String> collectionStream =  collection.stream();
 
         testFilterAndCount();
+        testMap();
+        testSkipAndLimit();
+        testSorted();
+    }
+
+    private static void testSorted() {
+        Collection<String> collection = Arrays.asList("a1","a2","a3","a1","a1");
+
+        System.out.println(">>>>> Test sorted:");
+        collection.stream()
+                .sorted() //tri ascendant par défaut
+                .forEach(System.out::println);
+
+        System.out.println(">>>> Tri descendant:");
+        collection.stream()
+                .sorted((s1, s2) -> -s1.compareTo(s2)).distinct().forEach(System.out::println);
+    }
+
+    private static void testSkipAndLimit() {
+
+        Collection<String> collection = Arrays.asList("a1","a2","a3","a4","a5");
+
+        System.out.println(">>>>>> Test skip and limit:");
+
+        //pagination
+        //afficher les 2 premiers éléménts
+        collection.stream()
+                .skip(0)
+                .limit(2)
+                .forEach(e -> System.out.println(e));
+
+        //2 éléments suivants
+        collection.stream()
+                .skip(2)
+                .limit(2)
+                .forEach(System.out::println);
+    }
+
+    private static void testMap() {
+        System.out.println(">>>>>>> Test Map:");
+
+        List<People> peoples = new ArrayList<>();
+        peoples.add(new People("William", 16, Sexe.MAN));
+        peoples.add(new People("John", 26, Sexe.MAN));
+        peoples.add(new People("Helene", 42, Sexe.WOMAN));
+        peoples.add(new People("Peter", 69, Sexe.MAN));
+
+        List<PeopleDto> dtos =peoples.stream()
+                .map(people -> new PeopleDto(people.getName(), people.getAge()) )
+                .collect(Collectors.toList());
+
+        dtos.forEach(System.out::println);
+
     }
 
     private static void testFilterAndCount() {
@@ -58,9 +112,22 @@ public class app {
         peoples.add(new People("Helene", 42, Sexe.WOMAN));
         peoples.add(new People("Peter", 69, Sexe.MAN));
 
-        //Liste et le nombre de people apte pour le service militaire: age antre 18 et 27 et se sexe MAN
+        //Liste et le nombre de people apte pour le service militaire: age entre 18 et 27 et se sexe MAN
+        System.out.println(">>>>>>>>< Service militaire:");
+        peoples.stream()
+                .filter(p -> p.getAge() >= 18 && p.getAge() <= 27 && p.getSexe().equals(Sexe.MAN) )
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
 
-        //Affichez le nombre de people pouvant travailler: age min 18 ans et 60 nas max pour les hommes et 55 max pour les femmes
+        //Affichez le nombre de people pouvant travailler: age min 18 ans et 60 ans max pour les hommes et 55 max pour les femmes
+        System.out.println(">>>>>>> Personnes pouvant travailler:");
+        long nb = peoples.stream()
+                .filter(p -> p.getAge() >= 18)
+                .filter( p ->( p.getSexe().equals(Sexe.WOMAN) && p.getAge() <= 55) || (p.getSexe().equals(Sexe.MAN) && p.getAge() <= 60))
+                .count();
+
+        System.out.println("People pouvant travaillé: "+count);
+
     }
 }
 
@@ -126,5 +193,42 @@ class People{
     @Override
     public int hashCode() {
         return Objects.hash(name, age, sexe);
+    }
+}
+
+class PeopleDto{
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public PeopleDto(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public PeopleDto() {
+    }
+
+    @Override
+    public String toString() {
+        return "PeopleDto{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

@@ -1,2 +1,5 @@
 1- Généricité ----------------- Sérialisation
 2- Reflection (introspection) ------------ (Voir SerialHelperGeneric - méthodes csv)
+3- Api Time: Nouveles classes permettant de manipuler les dates à partir de Java 8
+4- Interface Fonctionnelle
+5- Api Stream

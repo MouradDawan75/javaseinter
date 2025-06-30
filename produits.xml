@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="17.0.12" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="fr.dawan.javaintermidiare.genericite.Produit">
+    <void property="description">
+     <string>PC Dell</string>
+    </void>
+    <void property="id">
+     <int>1</int>
+    </void>
+    <void property="prix">
+     <double>1999.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="fr.dawan.javaintermidiare.genericite.Produit">
+    <void property="description">
+     <string>Ecran HP</string>
+    </void>
+    <void property="id">
+     <int>2</int>
+    </void>
+    <void property="prix">
+     <double>79.0</double>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

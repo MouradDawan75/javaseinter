@@ -15,5 +15,15 @@
     - Single of responsability
     - Open/close:
     - Liskov Substitution
-    - Inteface Segregation
+    - Interface Segregation
     - Dependency Inversion / Dependency Injection
+
+ 9- Tell don't ask: remplacer les appels des get/set par des méthodes métiers
+ 10- loi Demeter
+            /*
+            Loi Demeter:
+            Une classe ne doit interagir qu'avec les classes amies.
+            Une méthode définie dans une classe, ne peut utiliser:
+            - que ses propres paramètres
+            - que ses variables locales ou bien les attributs de la classe
+             */

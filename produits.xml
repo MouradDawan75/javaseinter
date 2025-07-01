@@ -2,7 +2,7 @@
 <java version="17.0.12" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
-   <object class="fr.dawan.javaintermidiare.genericite.Produit">
+   <object class="fr.dawan.javaintermediare.genericite.Produit">
     <void property="description">
      <string>PC Dell</string>
     </void>
@@ -15,7 +15,7 @@
    </object>
   </void>
   <void method="add">
-   <object class="fr.dawan.javaintermidiare.genericite.Produit">
+   <object class="fr.dawan.javaintermediare.genericite.Produit">
     <void property="description">
      <string>Ecran HP</string>
     </void>

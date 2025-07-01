@@ -4,4 +4,16 @@
 4- Interface Fonctionnelle
 5- Api Stream - Stream Parallel - Stream Sequentiel
 6- Threads - ThreadPool
-7- Rappels Concepts Objets: Encapsulation - Gestion des dependences entre les objets: Héritage -> Composition -> Association -> Relation
+7- Rappels Concepts Objets:
+    * Encapsulation
+    * Gestion des dépendences entre les objets: Héritage -> Composition -> Association -> Relation
+    ** Objectif: réduire au maximum les dépendences entre les objets
+    * Polymorphisme -----------> important: car permet d'obtenir un code facile à étendre
+
+ 8- Bonnes pratiques:
+    SOLID:
+    - Single of responsability
+    - Open/close:
+    - Liskov Substitution
+    - Inteface Segregation
+    - Dependency Inversion / Dependency Injection

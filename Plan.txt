@@ -1,5 +1,7 @@
 1- Généricité ----------------- Sérialisation
 2- Reflection (introspection) ------------ (Voir SerialHelperGeneric - méthodes csv)
-3- Api Time: Nouveles classes permettant de manipuler les dates à partir de Java 8
+3- Api Time: Nouvelles classes permettant de manipuler les dates à partir de Java 8
 4- Interface Fonctionnelle
-5- Api Stream
+5- Api Stream - Stream Parallel - Stream Sequentiel
+6- Threads - ThreadPool
+7- Rappels Concepts Objets: Encapsulation - Gestion des dependences entre les objets: Héritage -> Composition -> Association -> Relation

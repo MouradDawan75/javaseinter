@@ -84,7 +84,7 @@ public class app {
 
         /*
         l'approche fonctionnelle, repose sur l'utilisation d'interfaces fonctionnelles.
-        Concept introduit depuis Java (java.util.function)
+        Concept introduit depuis Java 8 (java.util.function)
         Une interface fonctionnelle est une interface qui ne contient qu'une seule méthode à implémenter
          */
 

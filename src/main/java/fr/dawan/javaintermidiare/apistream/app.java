@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class app {
@@ -43,6 +44,58 @@ public class app {
         testMap();
         testSkipAndLimit();
         testSorted();
+
+        /*
+        2 types de stream:
+        - Sequentiel
+        - Parallel: permet d'exécuter du code en parallel dans des Threads séparés.
+        Le résultat final est une combinaison de chaque résultat individuel
+        Pratique pour un appliquer le mm traitement à tous les éléments d'une collection
+         */
+
+        testStreamParallel();
+
+
+
+        testReduce();
+        testStreamParallelReduce();
+    }
+
+    private static void testStreamParallelReduce() {
+        System.out.println(">>>>> Test Stream Parallel Reduce............");
+        System.out.println(IntStream.rangeClosed(1,10).parallel().reduce(-10, Integer::sum));
+        /*
+        -10 sera appliqué pour chaque élément de la liste
+        Résutlat final = somme de chaque résultat individuel
+         */
+        // -9,-8, -7,-6,
+    }
+
+    private static void testReduce() {
+
+        System.out.println(">>>>>> Test Reduce............");
+
+        List<Integer> entiers = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+        int resultat = entiers.stream()
+                .reduce(-10, Integer::sum);
+
+        System.out.println("résultat = "+resultat);
+    }
+
+    private static void testStreamParallel() {
+        System.out.println(">>>>> Stream Parallel:");
+        List<Integer> entiers = Arrays.asList(1,2,3,4);
+
+        entiers.parallelStream()
+                //vérifier que élément de a liste est traité par un Thread à part
+                .forEach(n -> System.out.println(n+" "+Thread.currentThread().getName()));
+        /*
+        2 syntaxes pour le StreamParallel:
+          entiers.stream().parallel()
+          entiers.parallelSream()
+         */
+
+
     }
 
     private static void testSorted() {

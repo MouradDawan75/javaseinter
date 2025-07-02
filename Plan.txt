@@ -29,3 +29,6 @@
              */
 
 11- Couches d'une application: entities, repositories, services, dtos, ihm (value object)
+12- Designs Patterns
+            d'architecture: dto, repository,mvc,mvvp,value object......
+            concepts objets: de création, de comportement et de structure

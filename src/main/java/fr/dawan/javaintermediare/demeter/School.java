@@ -16,13 +16,13 @@ public class School {
 
     public int countStudents(){
         int nb = 0;
-        for(Grade grade : grades){
-            for(StudentClass classe: grade.getclasses()){
-                for(Student s : classe.getStudents()){
-                    nb++;
-                }
-            }
-        }
+//        for(Grade grade : grades){
+//            for(StudentClass classe: grade.getclasses()){
+//                for(Student s : classe.getStudents()){
+//                    nb++;
+//                }
+//            }
+//        }
 
         return nb;
     }

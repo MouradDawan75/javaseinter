@@ -1,7 +1,16 @@
 package fr.dawan.javaintermediare.designspatterns;
 
 import fr.dawan.javaintermediare.designspatterns.comportement.chainofreponsability.*;
+import fr.dawan.javaintermediare.designspatterns.comportement.memento.Editeur;
+import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurMemento;
+import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurState;
 import fr.dawan.javaintermediare.designspatterns.comportement.observer.*;
+import fr.dawan.javaintermediare.designspatterns.comportement.state.Commande;
+import fr.dawan.javaintermediare.designspatterns.comportement.visitor.*;
+import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.AuditSecurityVisitor;
+import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.Company;
+import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.ProfitabilityVisitor;
+import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.VisitorGeneric;
 import fr.dawan.javaintermediare.designspatterns.creation.builder.Product;
 import fr.dawan.javaintermediare.designspatterns.creation.builder.User;
 import fr.dawan.javaintermediare.designspatterns.creation.factory.ComputerFactory;
@@ -10,6 +19,9 @@ import fr.dawan.javaintermediare.designspatterns.creation.factory.Phone;
 import fr.dawan.javaintermediare.designspatterns.creation.prototype.Question;
 import fr.dawan.javaintermediare.designspatterns.creation.prototype.Reponse;
 import fr.dawan.javaintermediare.designspatterns.creation.singleton.Pdg;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class app {
 
@@ -32,7 +44,7 @@ public class app {
         Singleton, builder, factory, prototype, Abstract Factory, Object Pool
 
         Patterns de comportement:
-        chain of responsability, observer, state, visitor, iterator, strategy, template method
+        chain of responsability, observer, state, visitor, iterator, strategy, template method, Mediator
 
         Patterns de structure:
         proxy,adapter,bridge,composite,facade,decorator
@@ -182,8 +194,8 @@ public class app {
 
         System.out.println("____Observer:");
         /*
-        Permet de mettre en pace un mécanisme de souscription pour envoyer des notifiactions
-        à plusieurs objets au sujet d'évenement concernant les objets qu'ils observent.
+        Permet de mettre en pace un mécanisme de souscription pour l'envoi de notifications
+        à plusieurs objets au sujet d'évenements concernant les objets qu'ils observent.
          */
 
         Produit prod = new Produit("PC Dell", 2000);
@@ -201,6 +213,87 @@ public class app {
 
         cpt.retrait(4500); // ce retrait déclenche l'envoi d'une notif.
 
+        System.out.println("___________Memento");
+        /*
+        Comment sauvegarder et restaurer l'état précedent d'un objet, en mémoire
+         */
+
+        Editeur ed = new Editeur();
+        EditeurMemento memento = new EditeurMemento();
+        ed.setContent("a");
+        ed.setContent("b");
+        ed.setContent("c");
+
+        //Sauvegarde
+        memento.setState(ed.createMemento());
+
+
+        ed.setContent("e");
+        ed.setContent("f");
+        ed.setContent("g");
+
+        //restaurer l'état sauvegardé -> c
+
+        System.out.println(ed.restore(memento));
+
+        System.out.println("__________Visitor");
+        /*
+        Pour le mettre en place, il faut des objets qui partagent le mm traitement, mais qui diffère selon
+        le type de l'objet.
+        Ce pattern permet de séparer les traitements des objets
+        Rôle du Visitor: visiter tous les objets qui partagent le mm traitement
+        Rôle des objets: accepter la visite du Visitor
+
+        Intérêt:
+        open/close: code ouvert à l'extension, mais fermé à la modification
+         */
+
+        List<Forme> formes = new ArrayList<>();
+        formes.add(new Cercle());
+        formes.add(new Rectangle());
+
+        Visitor xmlVisitor = new XmlExport();
+        formes.forEach(f -> f.accepter(xmlVisitor));
+
+        Visitor jsonVisitor = new JsonExport();
+        formes.forEach(f -> f.accepter(jsonVisitor));
+
+        Company company = new Company();
+        VisitorGeneric v1 = new AuditSecurityVisitor();
+        company.accept(v1);
+
+        VisitorGeneric v2 = new ProfitabilityVisitor();
+        company.accept(v2);
+
+        System.out.println("_______state:");
+        /*
+        Pour le mettre en place: il faut avoir un objet dont le comportement varie en fonction de son état.
+        Concerne un objet qui peut avoir plusieurs états possibles connus d'avance.
+        Ex: Document -> brouillant - en correction - publication
+        Ex2: Commande: passée - payée - livrée - reçue
+
+        Intérêt:
+        open/close: code ouvert à l'extension, mais fermé à la modif.
+
+        Permet de changer le comportement de l'objet sans changer sa structure interne
+        State, propose d'extraire tout le code lié aux différents états de l'objet et de le mettre dans des classes distinctes.
+        Ce qui permet de prendre en compte de nouveaux états ou de modifier ceux existants.
+
+
+         */
+
+        Commande cmd = new Commande();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
+        cmd.next();
+        cmd.printState();
 
 
     }

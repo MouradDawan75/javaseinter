@@ -1,11 +1,16 @@
 package fr.dawan.javaintermediare.designspatterns;
 
 import fr.dawan.javaintermediare.designspatterns.comportement.chainofreponsability.*;
+import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.ChatRoom;
+import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.ChatUser;
+import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.IChatRoomMediator;
+import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.Participant;
 import fr.dawan.javaintermediare.designspatterns.comportement.memento.Editeur;
 import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurMemento;
 import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurState;
 import fr.dawan.javaintermediare.designspatterns.comportement.observer.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.state.Commande;
+import fr.dawan.javaintermediare.designspatterns.comportement.strategy.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.AuditSecurityVisitor;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.Company;
@@ -295,6 +300,51 @@ public class app {
         cmd.next();
         cmd.printState();
 
+        System.out.println("_________Mediator");
+        /*
+        Pour le mettre en place, il faut avoir des objets avec des dependences et des interactions.
+
+        Mediator permet de réduire la notion de dependence entre les différents objets.
+
+        Mediator doit connaite tous les objets et toutes interactions possibles entre ces objets.
+
+        En final, tous les objets vont dependre du Mediator
+
+        Ex: tour de contrôle des pistes d'attérissages
+        Ex: plateforme de chat
+         */
+
+        IChatRoomMediator mediator = new ChatRoom();
+        Participant p1 = new ChatUser("1", "Jean", mediator);
+        Participant p2 = new ChatUser("2", "Julien", mediator);
+
+        mediator.addUser(p1);
+        mediator.addUser(p2);
+
+        p1.send("Hello", "2");
+        p2.send("Bonjour", "1");
+
+        System.out.println("__________Strategy:");
+        /*
+        Permet de définir une famille d'algorithmes, de les mettre dans des classe séparées.
+
+        Intérêt:
+        open/close: code ouvert à l'extension, mais fermé à la modification.
+
+        Ex: Application de déplacements GPS itinéraire selon mode choisit(voiture, transports en communs, à pieds)
+        Ex: moyen de paiement en ligne
+         */
+
+        ShoppingCart cart = new ShoppingCart();
+        Item i1 = new Item("sdsq145", 156);
+        Item i2 = new Item("fgtyu", 120);
+
+        cart.addItem(i1);
+        cart.addItem(i2);
+
+        cart.pay(new CreditCardPayStrategy("","","",""));
+        cart.pay(new PaypalPayStrategy("email", "password"));
+        cart.pay(new VirementPayStrategy("1258qdsqdsqd"));
 
     }
 }

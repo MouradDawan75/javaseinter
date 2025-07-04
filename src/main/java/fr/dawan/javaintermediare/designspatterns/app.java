@@ -7,7 +7,6 @@ import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.IChatRoo
 import fr.dawan.javaintermediare.designspatterns.comportement.mediator2.Participant;
 import fr.dawan.javaintermediare.designspatterns.comportement.memento.Editeur;
 import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurMemento;
-import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurState;
 import fr.dawan.javaintermediare.designspatterns.comportement.observer.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.state.Commande;
 import fr.dawan.javaintermediare.designspatterns.comportement.strategy.*;
@@ -34,11 +33,22 @@ import fr.dawan.javaintermediare.designspatterns.structure.composite.Departement
 import fr.dawan.javaintermediare.designspatterns.structure.composite.Depatement;
 import fr.dawan.javaintermediare.designspatterns.structure.composite.FinancialDepatement;
 import fr.dawan.javaintermediare.designspatterns.structure.composite.SalesDepartement;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.bad.BasicCar;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.bad.Car;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.bad.SportCar;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.good.LuxuryCarDecorator;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.good.SportCarDecorator;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.good.CarBasic;
+import fr.dawan.javaintermediare.designspatterns.structure.decorator.good.ICar;
+import fr.dawan.javaintermediare.designspatterns.structure.facade.FacadeHelper;
+import fr.dawan.javaintermediare.designspatterns.structure.facade.MySqlHelper;
+import fr.dawan.javaintermediare.designspatterns.structure.facade.OracleHelper;
 import fr.dawan.javaintermediare.designspatterns.structure.proxy.Internet;
 import fr.dawan.javaintermediare.designspatterns.structure.proxy.ProxyInternet;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -416,7 +426,7 @@ public class app {
         Dans une conception basée sur les interactions: une application qui interagie avec des systèmes externes (API, BD....),
         les patterns de structure s'avèrent très utiles.
 
-        Pour interagir avec les systmètes externes, le système cible passe forcément par les patterns de structure
+        Pour interagir avec les systèmes externes, le système cible passe forcément par les patterns de structure
 
          */
 
@@ -475,6 +485,69 @@ try {
         composite.addDepartement(financialDep);
 
         composite.printDepartementName();
+
+        System.out.println("_________Facade");
+        /*
+        propose un accès simplifié à un ensemble de classes complèxes.
+        Ex: application qui appelle une BD distante (MySql, Oracle) et génère des rapports HTML et PDF.
+        Facade propose en sortie des méthodes répondant aux besoins de l'application cible
+
+         */
+
+        //Code sans Facade:
+        String tableName = "employes";
+        Connection cnx = MySqlHelper.getMySqlConnection();
+        MySqlHelper mySqlHelper = new MySqlHelper();
+        mySqlHelper.generateMySqlHtmlReport(tableName, cnx);
+        mySqlHelper.generateMySqlPdfReport(tableName, cnx);
+
+        Connection cnx2 = OracleHelper.getOracleConnection();
+        OracleHelper oracleHelper = new OracleHelper();
+        oracleHelper.generateOraceHtmlReport(tableName, cnx2);
+        oracleHelper.generateOraceHtmlReport(tableName, cnx2);
+
+        //Code avec Facade
+        FacadeHelper.generateReport(FacadeHelper.DatabaseType.MYSQL, FacadeHelper.ReportType.HTML, tableName);
+        FacadeHelper.generateReport(FacadeHelper.DatabaseType.ORACLE, FacadeHelper.ReportType.PDF, tableName);
+
+        System.out.println("_________Decorator");
+        /*
+        Permet d'affecter des comportements à des objets de manière dynamique,
+        dans des decorateurs (Wrapper - Classes) qui implèmentent ces comportements
+
+        L'héritage est statique. Vous ne pouvez modifier le comportement au moment de l'exécution.
+        Vous ne pouvez que remplacer la totalité de l'objet par un autre génère par une autre classe fille.
+
+        Solution: remplacer l'héritage par une composition
+
+        Intérêts:
+        réduire le couplage entre les objets
+        pouvoir affecter des comportements aux objets de manières
+
+         */
+
+        System.out.println(">>>> Sans Decorator:");
+        Car car = new BasicCar();
+
+        //Ajouter des options sportives
+        car = new SportCar();
+
+        car.assemble(); //1 seule méthode exécutée, celle de la classe SportCar - a cause de l'héritage qui est statique
+
+        System.out.println(">>>> Avec Decorator");
+
+        ICar myCar = new CarBasic();
+
+        //Ajout d'options:
+        myCar = new SportCarDecorator(myCar);
+        myCar.assemble(); // 2 méthodes seront exécutées
+
+        System.out.println(">>>>>>> options de luxe:");
+
+        myCar = new LuxuryCarDecorator(myCar);
+
+        myCar.assemble(); // 3 méthodes
+
 
     }
 }

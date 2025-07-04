@@ -11,6 +11,9 @@ import fr.dawan.javaintermediare.designspatterns.comportement.memento.EditeurSta
 import fr.dawan.javaintermediare.designspatterns.comportement.observer.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.state.Commande;
 import fr.dawan.javaintermediare.designspatterns.comportement.strategy.*;
+import fr.dawan.javaintermediare.designspatterns.comportement.templatemethod.FacebookNetwork;
+import fr.dawan.javaintermediare.designspatterns.comportement.templatemethod.NetworkTemplateMethod;
+import fr.dawan.javaintermediare.designspatterns.comportement.templatemethod.TwitterNetwork;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor.*;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.AuditSecurityVisitor;
 import fr.dawan.javaintermediare.designspatterns.comportement.visitor2.Company;
@@ -24,7 +27,18 @@ import fr.dawan.javaintermediare.designspatterns.creation.factory.Phone;
 import fr.dawan.javaintermediare.designspatterns.creation.prototype.Question;
 import fr.dawan.javaintermediare.designspatterns.creation.prototype.Reponse;
 import fr.dawan.javaintermediare.designspatterns.creation.singleton.Pdg;
+import fr.dawan.javaintermediare.designspatterns.structure.adapter.ChargeurAdapter;
+import fr.dawan.javaintermediare.designspatterns.structure.adapter.ChargeurAdapterImpl;
+import fr.dawan.javaintermediare.designspatterns.structure.adapter.Volt;
+import fr.dawan.javaintermediare.designspatterns.structure.composite.DepartementComposite;
+import fr.dawan.javaintermediare.designspatterns.structure.composite.Depatement;
+import fr.dawan.javaintermediare.designspatterns.structure.composite.FinancialDepatement;
+import fr.dawan.javaintermediare.designspatterns.structure.composite.SalesDepartement;
+import fr.dawan.javaintermediare.designspatterns.structure.proxy.Internet;
+import fr.dawan.javaintermediare.designspatterns.structure.proxy.ProxyInternet;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -331,8 +345,8 @@ public class app {
         Intérêt:
         open/close: code ouvert à l'extension, mais fermé à la modification.
 
-        Ex: Application de déplacements GPS itinéraire selon mode choisit(voiture, transports en communs, à pieds)
-        Ex: moyen de paiement en ligne
+        Ex: Application de déplacements GPS - itinéraire selon le mode choisit(voiture, transports en communs, à pieds)
+        Ex: moyens de paiement en ligne
          */
 
         ShoppingCart cart = new ShoppingCart();
@@ -345,6 +359,122 @@ public class app {
         cart.pay(new CreditCardPayStrategy("","","",""));
         cart.pay(new PaypalPayStrategy("email", "password"));
         cart.pay(new VirementPayStrategy("1258qdsqdsqd"));
+
+        System.out.println("_______ Template Method:");
+        /*
+        A mettre en place lorsque:
+        des classes contiennent beaucoup de code similaire (méthodes). Bien le code soit complètement différent d'une classe à une autre
+        la structure de base reste la mm (les étapes sont les mm).
+
+        Ex: Envoi d'un message via un réseau social: Etapes: login - send message - logout
+
+        Template Method permet de définir le squelette d'un algorithme dans la classe mère et laisse les classes filles
+        redéfinir certaines étapes.
+
+        Propose de découpe un algorithme en série étapes, de transformer chaque étape en méthode
+        ensuite de les regrouper d'une seule méthode socle appelée Template Method
+
+         */
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        NetworkTemplateMethod network = null;
+
+        System.out.println("Input user name: ");
+        String userName = br.readLine();
+
+        System.out.println("Input password: ");
+        String password = br.readLine();
+
+        System.out.println("Input message: ");
+        String message = br.readLine();
+
+        System.out.println("""
+                Choose social network:
+                1- Facebook
+                2- Twitter                
+                """);
+
+        int choix = Integer.parseInt(br.readLine());
+        if(choix == 1){
+            network = new FacebookNetwork(userName, password);
+        }else if(choix == 2){
+            network = new TwitterNetwork(userName,password);
+        }
+        /*
+        Sans Template Method:
+        login()
+        sendMessage()
+        logout()
+         */
+
+        //Appel de la Template Method
+        network.post(message);
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>> Patterns de Structure:");
+        /*
+        Appelés aussi Patterns de Composition.
+        Dans une conception basée sur les interactions: une application qui interagie avec des systèmes externes (API, BD....),
+        les patterns de structure s'avèrent très utiles.
+
+        Pour interagir avec les systmètes externes, le système cible passe forcément par les patterns de structure
+
+         */
+
+        System.out.println("______Proxy:");
+        /*
+        Permet de fournir un substitut d'un objet.
+        Dans un code, un Proxy est une copie de l'objet original, les 2 partagent la mm structure
+         */
+
+        Internet internet = new ProxyInternet();
+try {
+    internet.connectTo("dawan.com");
+    internet.connectTo("123.com");
+
+} catch (Exception e) {
+    System.out.println(e.getMessage());
+}
+
+        System.out.println("______Adapter:");
+
+        /*
+        Adatpter le contenu fournit par le système externe aux besoins de l'application en cours de dév.
+         */
+        ChargeurAdapter adapter = new ChargeurAdapterImpl();
+        Volt vlt1 = adapter.get4Volts();
+        System.out.println("Mobile 4 volts");
+
+        Volt vlt2 = adapter.get10Volts();
+        System.out.println("Tablette 10 volts");
+
+        Volt vlt3 = adapter.get120Volts();
+        System.out.println("PC 120 volts");
+
+        System.out.println("______Bridge:");
+
+        /*
+        Permet de défir un pont entre l'application en cours de dév. et les différents systèmes externes
+         */
+
+        System.out.println("______Composite:");
+        /*
+        - Pouvoir manipuler des objets individuellement
+        - Pouvoir manipuelr une composition d'objets
+
+        Contrainte: Les objets à manipuler doivent partager la mm structure (les mm méthodes)
+         */
+
+        //Sans le Composite: manipulation des objets individuellement
+        Depatement financialDep = new FinancialDepatement();
+        Depatement salesDep = new SalesDepartement();
+
+        //Avec le Composite: manipuler une composition d'objets (1 seul objet à manipuler dans le code)
+
+        DepartementComposite composite = new DepartementComposite();
+        composite.addDepartement(salesDep);
+        composite.addDepartement(financialDep);
+
+        composite.printDepartementName();
 
     }
 }
